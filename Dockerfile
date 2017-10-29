@@ -3,11 +3,10 @@ FROM openjdk:8-alpine
 RUN mkdir /server
 WORKDIR /server
 
-RUN apk add --no-cache openssl
+RUN apk add --no-cache openssl git
 
-RUN wget https://s3.amazonaws.com/Minecraft.Download/versions/1.12.2/minecraft_server.1.12.2.jar
+RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar
 
-COPY eula.txt .
-COPY server.properties .
+RUN exec $(git config --global --unset core.autocrlf)
 
-CMD ["java","-Xmx1024M","-Xms1024M","-jar","minecraft_server.1.12.2.jar","nogui"]
+RUN java -jar BuildTools.jar
